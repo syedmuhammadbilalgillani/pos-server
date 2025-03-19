@@ -5,9 +5,21 @@ import { AppModule } from './app.module';
 import { CustomLogger } from './logger/custom-logger.service';
 // import { GlobalExceptionFilter } from './logger/global-exception.filter';
 
+// Add this export function for Vercel serverless deployment
+export default async function handler(req, res) {
+  const app = await NestFactory.create(AppModule);
+  await app.init();
+  
+  const expressInstance = app.getHttpAdapter().getInstance();
+  return expressInstance(req, res);
+}
+
+// Keep your existing bootstrap function for local development
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: new CustomLogger(),
+    // logger: new CustomLogger(),
+    logger: ['error', 'warn'], // Reduce logging
+    cors: true,
   });
 
   // try {
@@ -62,10 +74,11 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   // Start listening on the specified port
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT || 3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
-bootstrap().catch((error) => {
-  console.error('Error starting the application:', error);
-});
+// Only call bootstrap when running directly (not as serverless)
+if (process.env.NODE_ENV !== 'production') {
+  bootstrap();
+}
