@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtHelper } from 'src/helper/token.helper';
+import { TokenService } from '../../../helper/token.service';
 import { Tenant, TenantSchema } from './schema/tenant.schema';
 import { TenantController } from './tenant.controller';
 import { TenantService } from './tenant.service';
-import { TokenService } from 'src/helper/token.service';
 
 @Module({
   imports: [

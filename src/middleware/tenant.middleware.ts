@@ -39,8 +39,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import { Model } from 'mongoose';
-import { TokenService } from 'src/helper/token.service';
-import { Tenant } from 'src/modules/SuperAdminModules/tenant/schema/tenant.schema';
+import { TokenService } from '../helper/token.service';
+import { Tenant } from '../modules/SuperAdminModules/tenant/schema/tenant.schema';
 interface CustomRequest extends Request {
   tenantId?: any;
   dbConnectionString?: string;

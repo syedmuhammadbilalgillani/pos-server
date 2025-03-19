@@ -4,7 +4,7 @@ import { TenantUserController } from './tenant-user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TenantUser, TenantUserSchema } from './schema/tenant-user.schema';
 import { Tenant, TenantSchema } from '../SuperAdminModules/tenant/schema/tenant.schema';
-import { TokenService } from 'src/helper/token.service';
+import { TokenService } from '../../helper/token.service';
 
 @Module({
   imports: [

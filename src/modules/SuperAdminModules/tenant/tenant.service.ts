@@ -3,9 +3,9 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { CreateTenantDto, TenantLoginDto } from './dto/tenant.dto';
 import { Tenant, TenantDocument } from './schema/tenant.schema';
-import { JwtHelper } from 'src/helper/token.helper';
+import { JwtHelper } from '../../../helper/token.helper';
 import { ConfigService } from '@nestjs/config';
-import { TenantUserSchema } from 'src/modules/tenant-user/schema/tenant-user.schema';
+import { TenantUserSchema } from '../../../modules/tenant-user/schema/tenant-user.schema';
 
 @Injectable()
 export class TenantService {

@@ -11,8 +11,8 @@ import {
   RegisterSuperAdminDto,
 } from './dto/super_admin.dto';
 import { SuperAdmin, SuperAdminDocument } from './schema/super_admin.schema';
-import { PasswordHelper } from 'src/helper/password.helper';
-import { JwtHelper } from 'src/helper/token.helper';
+import { JwtHelper } from '../../../helper/token.helper';
+import { PasswordHelper } from '../../..//helper/password.helper';
 
 @Injectable()
 export class SuperAdminService {

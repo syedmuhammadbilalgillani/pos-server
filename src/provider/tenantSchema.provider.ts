@@ -1,5 +1,5 @@
 import { Connection } from "mongoose";
-import { Store, StoreSchema } from "src/modules/store/schema/store.schema";
+import { Store, StoreSchema } from "../modules/store/schema/store.schema";
 
 export const tenantModels = {
     storeModel: {

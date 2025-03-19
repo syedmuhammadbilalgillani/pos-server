@@ -4,10 +4,10 @@ import { StoreService } from './store.service';
 import { StoreController } from './store.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Store, StoreSchema } from './schema/store.schema';
-import { tenantModels } from 'src/provider/tenantSchema.provider';
-import { tenantConnectionProvider } from 'src/provider/tenantDB.provider';
+import { tenantModels } from '../../provider/tenantSchema.provider';
+import { tenantConnectionProvider } from '../../provider/tenantDB.provider';
 import { TenantUserModule } from '../tenant-user/tenant-user.module';
-import { JwtHelper } from 'src/helper/token.helper';
+import { JwtHelper } from '../../helper/token.helper';
 
 @Module({
   imports: [ConfigModule, TenantUserModule],

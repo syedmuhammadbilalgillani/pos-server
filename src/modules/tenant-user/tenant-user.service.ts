@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { JwtHelper } from 'src/helper/token.helper';
-import { TokenService } from 'src/helper/token.service';
+import { JwtHelper } from '../../helper/token.helper';
+import { TokenService } from '../../helper/token.service';
 import { TenantLoginDto } from '../SuperAdminModules/tenant/dto/tenant.dto';
 import {
   Tenant,
