@@ -11,13 +11,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_SUPER_ADMIN_URI'),
-            // Connection timeout settings
-            connectTimeoutMS: 5000, // 5 seconds connection timeout
-            socketTimeoutMS: 45000, // 45 seconds socket timeout
-            serverSelectionTimeoutMS: 5000, // 5 seconds server selection timeout
-            // Additional performance optimizations
-            maxPoolSize: 10, // Limit connection pool size
-            minPoolSize: 1, // Maintain at least one connection
+        // Connection timeouts to fail faster
+        connectTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+        serverSelectionTimeoutMS: 5000,
+        // Connection pool settings
+        maxPoolSize: 10,
+        minPoolSize: 1,
+        // Important: Allow connections from anywhere (no IP whitelist)
+        directConnection: false,
       }),
       inject: [ConfigService],
     }),
