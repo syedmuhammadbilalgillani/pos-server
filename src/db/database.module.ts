@@ -10,9 +10,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        uri: configService.get<string>('MONGODB_SUPER_ADMIN_URI'),
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
       }),
       inject: [ConfigService],
     }),
