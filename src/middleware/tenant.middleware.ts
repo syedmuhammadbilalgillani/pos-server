@@ -57,9 +57,9 @@ export class TenantMiddleware implements NestMiddleware {
     // Exclude certain routes from tenant middleware
     let excludeRoutes;
     if (process.env.NODE_ENV !== 'production') {
-      excludeRoutes = ['/tenant', '/super-admin'];
-    } else {
       excludeRoutes = ['/api/v1/tenant', '/api/v1/super-admin'];
+    } else {
+      excludeRoutes = ['/tenant', '/super-admin'];
     }
     console.log(excludeRoutes, 'exludeRoutes');
     if (excludeRoutes.some((route: string) => req.path.startsWith(route))) {
