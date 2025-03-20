@@ -5,13 +5,37 @@ import { AppModule } from './app.module';
 import { CustomLogger } from './logger/custom-logger.service';
 // import { GlobalExceptionFilter } from './logger/global-exception.filter';
 
-// Add this export function for Vercel serverless deployment
 export default async function handler(req: any, res: any) {
   const app = await NestFactory.create(AppModule, {
     logger: new CustomLogger(),
     cors:false
   });
+
+  // Global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // API prefix and versioning
+  app.setGlobalPrefix('api/');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+
+  // Middleware for JSON and URL-encoded bodies
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
+
   await app.init();
+  // ... existing code ...
 
   const expressInstance = app.getHttpAdapter().getInstance();
   return expressInstance(req, res);
