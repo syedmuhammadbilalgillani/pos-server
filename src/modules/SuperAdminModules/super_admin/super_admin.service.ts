@@ -62,7 +62,7 @@ export class SuperAdminService {
     }
 
     const isValid = PasswordHelper.validatePassword(
-      dto.passwordHash,
+      dto.password,
       user.passwordHash,
       user.passwordSalt,
     );

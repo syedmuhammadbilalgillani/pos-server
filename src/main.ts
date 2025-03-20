@@ -9,6 +9,7 @@ import { CustomLogger } from './logger/custom-logger.service';
 export default async function handler(req: any, res: any) {
   const app = await NestFactory.create(AppModule, {
     logger: new CustomLogger(),
+    cors:false
   });
   await app.init();
 

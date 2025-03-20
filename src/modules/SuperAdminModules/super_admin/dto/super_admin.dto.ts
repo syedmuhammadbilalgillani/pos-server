@@ -18,5 +18,5 @@ export class LoginSuperAdminDto {
   email: string;
 
   @IsString()
-  passwordHash: string;
+  password: string;
 }
