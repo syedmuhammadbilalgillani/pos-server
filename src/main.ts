@@ -10,6 +10,39 @@ export default async function handler(req, res) {
   const app = await NestFactory.create(AppModule);
   await app.init();
   
+  app.setGlobalPrefix('api/');
+
+  // Enable versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+
+  // Global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // Enable CORS
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+    credentials: true,
+  });
+
+  // Middleware for JSON and URL-encoded bodies
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   const expressInstance = app.getHttpAdapter().getInstance();
   return expressInstance(req, res);
 }
