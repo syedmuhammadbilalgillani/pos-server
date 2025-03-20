@@ -8,7 +8,6 @@ import { CustomLogger } from './logger/custom-logger.service';
 export default async function handler(req: any, res: any) {
   const app = await NestFactory.create(AppModule, {
     logger: new CustomLogger(),
-    cors:false
   });
 
   // Global validation pipe
@@ -33,9 +32,16 @@ export default async function handler(req: any, res: any) {
   // Middleware for JSON and URL-encoded bodies
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
-
+  // Enable CORS
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+    credentials: true,
+  });
   await app.init();
-  // ... existing code ...
 
   const expressInstance = app.getHttpAdapter().getInstance();
   return expressInstance(req, res);
