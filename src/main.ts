@@ -6,43 +6,12 @@ import { CustomLogger } from './logger/custom-logger.service';
 // import { GlobalExceptionFilter } from './logger/global-exception.filter';
 
 // Add this export function for Vercel serverless deployment
-export default async function handler(req, res) {
-  const app = await NestFactory.create(AppModule);
+export default async function handler(req: any, res: any) {
+  const app = await NestFactory.create(AppModule, {
+    logger: new CustomLogger(),
+  });
   await app.init();
-  
-  app.setGlobalPrefix('api/');
 
-  // Enable versioning
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
-
-  // Global validation pipe
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
-
-  // Enable CORS
-  app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    allowedHeaders: 'Content-Type, Accept, Authorization',
-    credentials: true,
-  });
-
-  // Middleware for JSON and URL-encoded bodies
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ extended: true, limit: '50mb' }));
   const expressInstance = app.getHttpAdapter().getInstance();
   return expressInstance(req, res);
 }
@@ -50,8 +19,8 @@ export default async function handler(req, res) {
 // Keep your existing bootstrap function for local development
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    // logger: new CustomLogger(),
-    logger: ['error', 'warn'], // Reduce logging
+    logger: new CustomLogger(),
+    // logger: ['error', 'warn'], // Reduce logging
     cors: true,
   });
 

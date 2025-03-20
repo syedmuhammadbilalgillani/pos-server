@@ -55,11 +55,17 @@ export class TenantMiddleware implements NestMiddleware {
 
   async use(req: CustomRequest, res: Response, next: NextFunction) {
     // Exclude certain routes from tenant middleware
-    const excludeRoutes = ['/api/v1/tenant', '/api/v1/super-admin'];
-    if (excludeRoutes.some(route => req.path.startsWith(route))) {
+    let excludeRoutes;
+    if (process.env.NODE_ENV !== 'production') {
+      excludeRoutes = ['/tenant', '/super-admin'];
+    } else {
+      excludeRoutes = ['/api/v1/tenant', '/api/v1/super-admin'];
+    }
+    console.log(excludeRoutes, 'exludeRoutes');
+    if (excludeRoutes.some((route: string) => req.path.startsWith(route))) {
       return next();
     }
-    
+
     console.log(req.path);
     console.log('TenantMiddleware triggered');
 
@@ -74,27 +80,36 @@ export class TenantMiddleware implements NestMiddleware {
     try {
       // Use the injected TokenService
       const result = this.tokenService.verifyToken(token);
-      
+
       if (!result.valid || !result.decoded) {
-        console.error('[TenantMiddleware] Token verification failed:', result.error);
+        console.error(
+          '[TenantMiddleware] Token verification failed:',
+          result.error,
+        );
         throw new UnauthorizedException('Invalid or expired token');
       }
-      
+
       // Type assertion - now safely accessing the decoded property that we know exists
       const decodedToken = result.decoded as any;
-      
+
       if (!decodedToken.tenantId) {
-        console.error('[TenantMiddleware] Token payload missing tenantId:', decodedToken);
+        console.error(
+          '[TenantMiddleware] Token payload missing tenantId:',
+          decodedToken,
+        );
         throw new BadRequestException('Token missing tenantId');
       }
-      
+
       // Find the tenant
       const tenant = await this.tenantModel.findOne({
         _id: decodedToken.tenantId,
       });
-      
+
       if (!tenant) {
-        console.error('[TenantMiddleware] Tenant not found for ID:', decodedToken.tenantId);
+        console.error(
+          '[TenantMiddleware] Tenant not found for ID:',
+          decodedToken.tenantId,
+        );
         throw new BadRequestException('Invalid tenant');
       }
 
@@ -102,7 +117,10 @@ export class TenantMiddleware implements NestMiddleware {
       req.tenantId = tenant._id;
       req.dbConnectionString = tenant.dbConnectionString;
 
-      console.log('[TenantMiddleware] Middleware completed successfully for tenant:', tenant._id);
+      console.log(
+        '[TenantMiddleware] Middleware completed successfully for tenant:',
+        tenant._id,
+      );
       next();
     } catch (error) {
       console.error('[TenantMiddleware] Error:', error.message, error.stack);
