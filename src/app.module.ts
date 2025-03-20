@@ -34,10 +34,11 @@ import { TokenService } from './helper/token.service';
   providers: [AppService, JwtHelper, TokenService],
   exports: [TokenService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(TenantMiddleware)
-      .forRoutes({ path: '/*path', method: RequestMethod.ALL }); // Use "*path" instead of ":path(*)"
-  }
+export class AppModule {
+// export class AppModule implements NestModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(TenantMiddleware)
+  //     .forRoutes({ path: '/*path', method: RequestMethod.ALL }); // Use "*path" instead of ":path(*)"
+  // }
 }
